@@ -3,10 +3,12 @@ const botao= document.getElementsByClassName("botao");
 for(let i= 0; i < botao.length; i++) {
     botao[i].addEventListener("click", function inserir() {
     const N = this.innerHTML;
+    const resultadoElement = document.getElementById("resultado");
+    const resultado = resultadoElement.innerHTML;
 
     if (N === "C"){
         excluirNumero();
-    } else if (N === "CE"){
+    } else if (N === "R"){
         
     function voltarNumero () {
     var resultado = document.getElementById('resultado').innerHTML;
@@ -19,12 +21,23 @@ for(let i= 0; i < botao.length; i++) {
     } else if (N === "="){
        operacaoMatematica();  
     } else {
-        var numero = document.getElementById("resultado").innerHTML;
-        document.getElementById('resultado').innerHTML =  numero + N;
-    
+        const operadores = ['+', '-', '*', '/'];
+        const ultimoCaractere = resultado[resultado.length - 1];
+        
+
+        if (operadores.includes(N)){
+            if (operadores.includes(ultimoCaractere)) {
+                resultadoElement.innerHTML = resultado.slice(0, -1) + N;
+            } else {
+                resultadoElement.innerHTML += N;
+            }
+        } else {
+            resultadoElement.innerHTML += N;
+        }
     }
     
 });
+
 }
 
 function excluirNumero () {
@@ -38,6 +51,13 @@ function operacaoMatematica() {
         var valor = eval(resultado.replace(/X/g, '*').replace(/,/g, '.'));
         valor = Math.round(valor * 100) / 100;
         document.getElementById("resultado").innerHTML = valor;
+
+        if(valor === Infinity){
+            document.getElementById("resultado").innerHTML = "Divisão por zero";
+        } else if (isNaN(valor)){
+            document.getElementById("resultado").innerHTML = "Indeterminado";
+        }
+
     } else {
         document.getElementById("resultado").innerHTML = "Erro";
     }
